@@ -11,7 +11,7 @@ function auth (req,res, next) {
     try {
         const verified = jwt.verify(token, procss.env.TOKEN_SECRET);
         req.user = verified;
-        next()
+        // next()
     } catch (error) {
         res.writeHead(400, { "Content-TYpe": "application/json" });
         return res.end("Invalid Token");

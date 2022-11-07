@@ -6,7 +6,7 @@ require('./db/connect')
 
 
 const server = http.createServer(
-    // newUser,
+    newUser,
     allUsers
 )
 

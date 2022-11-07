@@ -6,7 +6,6 @@ const router = async (req, res) => {
     try {
       const users = await getUsers(req, res);
       res.writeHead(200, { "Content-Type": "application/json" });
-
       res.end(users);
     } catch (error) {
       res.writeHead(400, { "Content-TYpe": "application/json" });

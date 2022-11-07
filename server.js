@@ -6,8 +6,7 @@ require('./db/connect')
 
 
 const server = http.createServer(
-    newUser,
-    allUsers
+    newUser
 )
 
 const PORT = 5000

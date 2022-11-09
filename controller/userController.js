@@ -26,13 +26,13 @@ async function createUser(req, res) {
 
     if (emailExist) {
       res.writeHead(400, { "Content-TYpe": "application/json" });
-      return res.end("User Already Exist");
+      res.end(JSON.stringify({message:"User Already"}));
+    } else {
+      const newUser = await User.create(user);
+
+      res.writeHead(201, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ newUser }));
     }
-
-    const newUser = await User.create(user);
-
-    res.writeHead(201, { "Content-Type": "application/json" });
-    return res.end(JSON.stringify({ user: newUser._id }));
   } catch (error) {
     console.log(error);
   }
@@ -58,25 +58,23 @@ async function userLogin(req, res) {
 
     //checking if email already exist
     const currentUser = await User.findOne({ email });
-
-    if (!currentUser) {
-      res.writeHead(400, { "Content-TYpe": "application/json" });
-      return res.end("Email is wrong");
-    }
+    console.log(currentUser)
+    console.log(user)
 
     //checking if password is correct
     const validPassword = await bcrypt.compare(password, currentUser.password);
+    console.log(validPassword)
 
-    if (!validPassword) {
+    if (currentUser && validPassword) {
+      //create and assign token
+      const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
+      res.setHeader("auth-token", token);
+      res.writeHead(201, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ user, token }));
+    } else {
       res.writeHead(400, { "Content-TYpe": "application/json" });
-      return res.end("Invalid password");
+      res.end(JSON.stringify({message:"Invalid Email or password"}));
     }
-
-    //create and assign token
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET);
-    res.setHeader("auth-token", token);
-    res.writeHead(201, { "Content-Type": "application/json" });
-    return res.end(token);
   } catch (error) {
     console.log(error);
   }
@@ -95,7 +93,7 @@ async function getUsers(req, res) {
       email,
     };
 
-    const users = await User.find({ user })
+    const users = await User.find({ user });
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(users));

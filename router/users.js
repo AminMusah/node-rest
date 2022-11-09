@@ -11,6 +11,9 @@ const router = async (req, res) => {
       res.writeHead(400, { "Content-TYpe": "application/json" });
       return res.end(JSON.stringify({ message: "Route not found" }));
     }
+  } else {
+    res.writeHead(400, { "Content-TYpe": "application/json" });
+    return res.end(JSON.stringify({ message: "Route not found" }));
   }
 };
 

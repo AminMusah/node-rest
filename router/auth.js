@@ -18,12 +18,10 @@ const router = async (req, res) => {
         const login = await userLogin(req,res)
         res.end(login);
     } catch (error) {
-        res.writeHead(400, { 'Content-TYpe': 'application/json'})
-        return res.end(JSON.stringify({message: 'Route not found'}))
+      res.writeHead(400, { "Content-TYpe": "application/json" });
+      return res.end(JSON.stringify({message: 'Route not found'}))
     }
   }
-
-
 };
 
 module.exports = router;
